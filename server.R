@@ -1,9 +1,12 @@
 # server.R
+library(shiny)
 library(leaflet)
 library(data.table)
+library(dplyr)
+# a comment
 #library(rgdal)
 
-villages  <- data.table(read.csv("darfurVillages.csv"))
+villages  <- read.csv("darfurVillages.csv")
 villages  <- dplyr::filter(villages, Yr.Range1 == 2006, Aprox.Str1 == 0)
 
 baseMap  <- leaflet() %>%
@@ -25,11 +28,25 @@ shinyServer(function(input, output){
     
   )
   
-  output$map.villages  <- renderLeaflet({
-    villages.filtered  <- filter(villages, Status %in% condition.selected())    
+  villages.filtered  <- reactive({
+    dplyr::filter(villages, villages$Status %in% condition.selected())    
     
-    baseMap %>%
-      addMarkers(lat=villages.filtered$latitude,lng=villages.filtered$longitude)
+  })
+  
+  output$map.villages  <- renderLeaflet({
+    if(as.integer(count(villages.filtered())) == 0)
+      {leaflet()}
+      else
+    
+    {baseMap %>%
+      addMarkers(data=villages.filtered(), lat= villages.filtered()$Lat.Dd, 
+                 lng= villages.filtered()$Long.Dd)
+    }
+  })
+  
+  output$village.count  <- renderText({
+    c("Number of villages: ", as.integer(count(villages.filtered())))
+    
   })
   
   #   output$table  <- renderTable({

@@ -1,4 +1,5 @@
 # ui.R
+library(leaflet)
 
 fluidPage(
   leafletOutput('map.villages'),
@@ -15,7 +16,9 @@ fluidPage(
                          selected = c(2,3)
       ),
       hr(),
-      textOutput("text1")
+      textOutput("text1"),
+      hr(),
+      textOutput("village.count")
      ),
     style = "opacity = 9.2"
    )
