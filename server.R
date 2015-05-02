@@ -11,7 +11,7 @@ villages  <- dplyr::filter(villages, Yr.Range1 == 2006, Aprox.Str1 == 0)
 
 village.colors  <- c(
          "DESTROYED" ="#ff0000",
-         "DAMAGED"='blue',
+         "DAMAGED"='yellow',
          "NO DAMAGE"='green'
          )
 
