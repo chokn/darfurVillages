@@ -9,6 +9,16 @@ library(dplyr)
 villages  <- read.csv("darfurVillages.csv")
 villages  <- dplyr::filter(villages, Yr.Range1 == 2006, Aprox.Str1 == 0)
 
+village.colors  <- c(
+         "DESTROYED" ="#ff0000",
+         "DAMAGED"='blue',
+         "NO DAMAGE"='green'
+         )
+
+colorPal  <- colorFactor(village.colors, names(village.colors))
+
+
+
 baseMap  <- leaflet() %>%
   addTiles()
 
@@ -29,7 +39,7 @@ shinyServer(function(input, output){
   )
   
   villages.filtered  <- reactive({
-    dplyr::filter(villages, villages$Status %in% condition.selected())    
+    dplyr::filter(villages, villages$Status %in% input$condition)
     
   })
   
@@ -39,8 +49,10 @@ shinyServer(function(input, output){
       else
     
     {baseMap %>%
-      addMarkers(data=villages.filtered(), lat= villages.filtered()$Lat.Dd, 
-                 lng= villages.filtered()$Long.Dd)
+      addCircleMarkers(data=villages.filtered(), lat= villages.filtered()$Lat.Dd, 
+                 lng= villages.filtered()$Long.Dd, 
+                 color = ~colorPal(Status)
+                 )
     }
   })
   

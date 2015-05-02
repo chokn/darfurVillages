@@ -12,8 +12,8 @@ fluidPage(
     wellPanel(
       h1("Inputs"),
       checkboxGroupInput("condition", label= h3("Village condition"),
-                         choices = list("No damage" = 1, "Damaged" = 2, "Destroyed" = 3),
-                         selected = c(2,3)
+                         choices = list("No damage" = "NO DAMAGE", "Damaged" = "DAMAGED", "Destroyed" = "DESTROYED"),
+                         selected = c("DAMAGED", "DESTROYED")
       ),
       hr(),
       textOutput("text1"),
