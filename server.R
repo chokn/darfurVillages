@@ -21,7 +21,9 @@ colorPal  <- colorFactor(village.colors, names(village.colors))
 
 baseMap  <- leaflet() %>%
   addTiles()
-
+villages.popup = paste0("<strong>Name: </strong>", villages$Name,
+                       "<br><strong>Status: </strong>", villages$Status,
+                       "<br><strong>Year confirmed: </strong>", villages$Yr.Confirm)
 
 shinyServer(function(input, output){
   condition.selected <- reactive({
@@ -51,7 +53,9 @@ shinyServer(function(input, output){
     {baseMap %>%
       addCircleMarkers(data=villages.filtered(), lat= villages.filtered()$Lat.Dd, 
                  lng= villages.filtered()$Long.Dd, 
-                 color = ~colorPal(Status)
+                 color = ~colorPal(Status),
+                 radius = 2,
+                 popup = villages.popup
                  )
     }
   })
