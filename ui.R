@@ -7,7 +7,7 @@ fluidPage(
   titlePanel(p("hello"),{textOutput("text1")}),
   
   absolutePanel(
-    bottom = 20, right = 20, width = 300,
+    top = 20, left = 30, width = 200,
     draggable = TRUE,
     wellPanel(
       h1("Inputs"),
@@ -16,6 +16,8 @@ fluidPage(
                          selected = c("DAMAGED", "DESTROYED")
       ),
       hr(),
+      sliderInput("year.range", label = "Year range", min = 2003, max = 2010, sep="",
+                  value = c(2006, 2007), ticks = FALSE),
       textOutput("text1"),
       hr(),
       textOutput("village.count")
