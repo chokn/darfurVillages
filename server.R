@@ -19,8 +19,7 @@ colorPal  <- colorFactor(village.colors, names(village.colors))
 
 
 
-baseMap  <- leaflet() %>%
-  addTiles()
+
 villages.popup = paste0("<strong>Name: </strong>", villages$Name,
                        "<br><strong>Status: </strong>", villages$Status,
                        "<br><strong>Year confirmed: </strong>", villages$Yr.Confirm)
@@ -46,20 +45,24 @@ shinyServer(function(input, output){
   })
   
   output$map.villages  <- renderLeaflet({
-    if(as.integer(count(villages.filtered())) == 0)
-      {leaflet()}
-      else
-    
-    {baseMap %>%
-      addCircleMarkers(data=villages.filtered(), lat= villages.filtered()$Lat.Dd, 
-                 lng= villages.filtered()$Long.Dd, 
-                 color = ~colorPal(Status),
-                 radius = 2,
-                 popup = villages.popup
-                 )
-    }
+    leaflet() %>%
+      addTiles()
   })
-  
+
+  observe({
+    
+    leafletProxy("map.villages") %>%
+      clearShapes() %>% 
+      addCircleMarkers(data=villages.filtered(), lat= Lat.Dd, 
+                       lng= Long.Dd, 
+                       color = ~colorPal(Status),
+                       radius = 2,
+                       popup = villages.popup
+      )
+    
+    
+  })
+    
   output$village.count  <- renderText({
     c("Number of villages: ", as.integer(count(villages.filtered())))
     
